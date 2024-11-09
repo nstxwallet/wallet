@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "@biomejs/biome": "^1.5.3"
+  },
+  "scripts": {
+    "format": "biome format ./packages/client --write",
+    "lint": "biome check ./packages/client",
+    "lint:fix": "biome check ./packages/client --apply-unsafe"
+  }
+}
