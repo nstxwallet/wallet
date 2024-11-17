@@ -14,6 +14,7 @@ export const login = async ({
 	return response.data.accessToken;
 };
 
+
 export const logout = async (): Promise<void> => {
 	const response = await instance.get("/logout", {
 		withCredentials: true,

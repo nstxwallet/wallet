@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import { Button, Paper, Row, Typography } from "@/shared";
 

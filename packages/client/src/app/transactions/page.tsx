@@ -1,16 +1,24 @@
 "use client";
 
-import { TransactionsForm } from "@/feautures";
-import { useTransactions } from "@/core"
+import { useState } from "react";
+
+import { WalletForm } from "@/feautures";
+import { useAuth, useBalances, useTransactions } from "@/core";
 
 export default function TransactionsPage() {
-  const { transactions, isLoading, isError } = useTransactions({ id: '2' });
+  const { user } = useAuth();
+  const { balances } = useBalances({ userId: user?.id });
+  const { transactions } = useTransactions({ id: "2" });
+  const [isLoadingTransactions, _setIsLoadingTransactions] = useState(true);
+  const [isErrorTransactions, _setIsErrorTransactions] = useState(false);
 
   return (
-    <TransactionsForm
+    <WalletForm
+        balances={balances}
+      user={user}
       transactions={transactions}
-      isLoading={isLoading}
-      isError={isError}
+      isLoadingTransactions={isLoadingTransactions}
+      isErrorTransactions={isErrorTransactions}
     />
   );
 }

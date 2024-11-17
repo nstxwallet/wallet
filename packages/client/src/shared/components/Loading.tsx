@@ -14,7 +14,7 @@ const sizeClasses = {
 export const Loading  = ({ size = 'medium', color = 'border-cyan-500' } : LoadingProps ) => {
 	return (
 
-			<div className='flex items-center justify-center'>
+			<div className='flex min-h-screen items-center justify-center'>
 				<div
 					className={`animate-spin rounded-full border-t-transparent ${color} ${sizeClasses[size]} border-solid border-gray-200`}
 				/>

@@ -1,9 +1,9 @@
 export interface User {
-	token: string;
-	id: string;
-	email: string;
-	firstName?: string;
-	lastName?: string;
+  id: string;
+  email: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
 }
 
 export interface Transaction {
@@ -23,6 +23,8 @@ export interface Balance {
 	userId: string;
 	value: number;
 	currency: string;
+	createdAt? : Date
+	updatedAt? : Date
 }
 
 export interface Currency {

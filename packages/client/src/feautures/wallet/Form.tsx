@@ -1,63 +1,65 @@
 "use client";
 
-import Link from "next/link";
-import { Transaction, User } from "@/core";
-
-import { Col, Row } from "@/shared";
-import {BankCardSlider} from "@/feautures";
-import {TransactionsList, TransactionsTable} from "@/shared";
+import React from "react";
+import { Balance, Transaction, User } from "@/core";
+import {
+  Button,
+  Col,
+  Grid,
+  Paper,
+  Row,
+  TransactionsList,
+  TransactionsTable,
+  Typography,
+} from "@/shared";
+import { BankCardSlider } from "@/feautures";
 
 export const WalletForm = ({
   user,
+  balances,
   transactions,
   isLoadingTransactions,
   isErrorTransactions,
 }: {
-  user?: User;
+  user: User | null | undefined;
+  balances: Balance[] | null | undefined;
   transactions?: Transaction[];
   isLoadingTransactions: boolean;
   isErrorTransactions: boolean;
 }) => {
-
   return (
-    <>
-      <Row className="justify-between flex-col lg:flex-row">
-        <Col className="w-full lg:w-1/3">
-          <BankCardSlider user={user} />
-        </Col>
-        <Col className="bg-gray-700 p-24 w-full lg:w-1/3 h-48 rounded-lg">
-          <p>Graph</p>
+    <Grid>
+      <Paper color="secondary" className="flex items-center justify-between">
+        <Typography variant="h5" className="text-lg font-medium">
+          TransactionHistory.pdf
+        </Typography>
+        <Button variant="bordered">Download</Button>
+      </Paper>
+      <Row className="w-full justify-center">
+        <Col className="w-full">
+          <BankCardSlider balances={balances} user={user} />
         </Col>
       </Row>
-
-      <Row>
-        <Link
-          href="/transactions"
-          className="text-2xl text-blue-500 hover:text-blue-200 shadow-sm hover:shadow-md transition-shadow duration-300"
-        >
-          Go to all transactions...
-        </Link>
-      </Row>
-
       <Row className="hidden lg:flex flex-col">
-        {isLoadingTransactions ? (
-          <p>Loading transactions...</p>
-        ) : isErrorTransactions ? (
-          <p>Error loading transactions.</p>
-        ) : (
-          <TransactionsTable transactions={transactions} />
-        )}
+        <TransactionsTable transactions={transactions} />
       </Row>
-
       <Row className="flex flex-col lg:hidden">
-        {isLoadingTransactions ? (
-          <p>Loading transactions...</p>
-        ) : isErrorTransactions ? (
-          <p>Error loading transactions.</p>
-        ) : (
-          <TransactionsList transactions={transactions} />
-        )}
+        <TransactionsList transactions={transactions} />
       </Row>
-    </>
+      <Row className="flex lg:hidden p-6 ">
+        <TransactionsList
+          transactions={transactions}
+          isTransactionsLoading={isLoadingTransactions}
+          isTransactionsError={isErrorTransactions}
+        />
+      </Row>
+      <Typography className="text-center text-sm lg:text-base mt-4">
+        By using our services, you agree to our{" "}
+        <a href="/terms" className="text-blue-400 hover:underline">
+          terms and conditions
+        </a>
+        . Please read them carefully before using our services.
+      </Typography>
+    </Grid>
   );
 };

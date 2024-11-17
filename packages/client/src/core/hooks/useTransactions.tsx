@@ -7,7 +7,7 @@ import {
 	getTransactionsForCurrency,
 	updateTransactionNote,
 } from "@/core/api/transactions";
-import { Balance, Transaction } from "../interfaces";
+import { Balance, Transaction } from "@/core";
 
 interface TransactionProps {
 	onSuccess?: (data: unknown) => void;

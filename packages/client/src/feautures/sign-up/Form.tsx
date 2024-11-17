@@ -1,5 +1,4 @@
-import { useFormik } from "formik";
-import * as yup from "yup";
+import {FormikProps} from "formik";
 import Link from "next/link";
 import {
   Button,
@@ -11,34 +10,11 @@ import {
 } from "@/shared";
 
 interface SignUpProps {
-  validationSchema: yup.ObjectSchema<{
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-  }>;
-  onSubmit: (values: {
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-  }) => void;
+  onSubmit: () => void;
+  formik: FormikProps<{ email: string; password: string; firstName: string; lastName: string }>;
 }
 
-export const SignUpForm = ({ onSubmit, validationSchema }: SignUpProps) => {
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-      firstName: "",
-      lastName: "",
-    },
-    validationSchema,
-    onSubmit: (values) => {
-      onSubmit(values);
-    },
-  });
-
+export const SignUpForm = ({ onSubmit, formik  }: SignUpProps) => {
   return (
       <Grid container justify="center" align="center" className="min-h-screen p-8">
         <Paper
@@ -60,7 +36,7 @@ export const SignUpForm = ({ onSubmit, validationSchema }: SignUpProps) => {
             <Typography variant="h3" center  className="mb-4">
               Join our team
             </Typography>
-            <Form onSubmit={formik.handleSubmit}>
+            <Form onSubmit={onSubmit}>
               <Input
                   fullWidth
                   type="text"

@@ -22,7 +22,7 @@ export const Button = ({
 						   variant = "primary",
 						   icon,
 						   iconPosition = "left",
-					   } : ButtonProps ) => {
+					   }: ButtonProps) => {
 	const variantStyles = {
 		primary: "bg-blue-500 border border-blue-500 text-white hover:bg-blue-600",
 		secondary: "bg-teal-400 border border-teal-600 text-white hover:bg-teal-700",
@@ -32,7 +32,7 @@ export const Button = ({
 	};
 
 	const baseStyles =
-		"rounded-lg flex font-light shadow-md transition focus:outline-none focus:ring-2 focus:ring-blue-300";
+		"rounded-lg flex font-light shadow-md transition focus:outline-none focus:ring-2 focus:ring-blue-300 justify-center items-center text-center";
 	const sizeStyles = {
 		sm: "px-4 py-2",
 		md: "px-6 py-3",
@@ -43,7 +43,7 @@ export const Button = ({
 		<button
 			className={`${fullWidth ? "w-full" : ""} ${variantStyles[variant]} ${
 				sizeStyles[size]
-			} ${className} ${baseStyles} items-center`}
+			} ${className} ${baseStyles}`}
 			onClick={onClick}
 			type={type}
 		>
@@ -52,7 +52,7 @@ export const Button = ({
 			)}
 			{children}
 			{icon && iconPosition === "right" && (
-				<span className="ml-4">{icon}</span>
+				<span className="ml-2">{icon}</span>
 			)}
 		</button>
 	);

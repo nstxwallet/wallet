@@ -1,7 +1,7 @@
 import { MdVerifiedUser } from "react-icons/md";
 
 import { UserMock } from "@/core";
-import { Button, Grid, Paper, Typography } from "@/shared";
+import {Button, Container, Paper, Typography} from "@/shared";
 
 interface SettingsFormProps {
   user?: UserMock;
@@ -11,7 +11,7 @@ interface SettingsFormProps {
 
 export const SettingsForm = ({ user, open, setOpen }: SettingsFormProps) => {
   return (
-      <Grid container>
+      <Container className="space-y-12 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Paper>
             <div className="flex items-center justify-between">
@@ -130,6 +130,6 @@ export const SettingsForm = ({ user, open, setOpen }: SettingsFormProps) => {
             )}
           </Paper>
         </div>
-      </Grid>
+      </Container>
   );
 };

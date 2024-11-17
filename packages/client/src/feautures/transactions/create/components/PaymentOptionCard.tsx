@@ -1,5 +1,5 @@
 import React from "react";
-import { Paper, Row, Typography } from "@/shared/components";
+import { Paper, Row, Typography } from "@/shared";
 
 interface ReplenishCardProps {
 	title?: string;

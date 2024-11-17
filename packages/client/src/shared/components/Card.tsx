@@ -7,11 +7,10 @@ interface FeatureProps {
   icon: IconType;
   title: string;
   description: string;
-  id: string;
 }
 
 interface FeatureCardProps {
-  features?: FeatureProps[];
+  features: FeatureProps[];
   headingText?: string;
   headingColor?: "primary" | "secondary" | "blue" | "warning" | "cyan";
 }
@@ -40,7 +39,7 @@ export const Card = ({
       </Typography>
       <div className="grid grid-cols-1 py-12 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {features?.map((feature) => (
-          <Feature key={feature.id} {...feature} />
+          <Feature key={feature.title} {...feature} />
         ))}
       </div>
     </>

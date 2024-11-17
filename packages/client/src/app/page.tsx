@@ -1,7 +1,6 @@
 "use client";
 
 import "reflect-metadata";
-
 import React from "react";
 
 import { useRouter } from "next/navigation";
@@ -12,7 +11,7 @@ import {Home} from "@/feautures";
 export default function HomePage() {
   const router = useRouter();
 
-  const { isAuthenticated, user } = useAuth();
+  const {  user } = useAuth();
 
   const handleLogin = () => {
     router.push("/auth/login");
@@ -24,13 +23,16 @@ export default function HomePage() {
   const handleSupport = () => {
     router.push("/support");
   };
+  const handleSignUp = () => {
+    router.push("/auth/sign-up");
+  }
 
   return (
     <Home
-      isAuthenticated={isAuthenticated}
       user={user}
       handleLogin={handleLogin}
       handleSupport={handleSupport}
+      handleSignUp={handleSignUp}
       handleWallet={handleWallet}
     />
   );

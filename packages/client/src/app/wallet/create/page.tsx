@@ -4,11 +4,16 @@ import React from "react";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
 import * as Yup from "yup";
-import {CreatWalletForm} from "@/feautures";
+import { toast } from "react-toastify";
 
+import { CreateWalletForm } from "@/feautures";
+import {useAuth, useBalances} from "@/core";
 
 export default function CreateBalanceForm() {
   const router = useRouter();
+  const { user } = useAuth();
+  const { createBalance } = useBalances({ userId: user?.id });
+
   const formik = useFormik({
     initialValues: {
       currency: "",
@@ -18,17 +23,26 @@ export default function CreateBalanceForm() {
       currency: Yup.string().required("Currency is required"),
       terms: Yup.boolean().oneOf([true], "You must accept the terms"),
     }),
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async (values, { setSubmitting }) => {
+      try {
+        createBalance(values.currency);
+        setSubmitting(false);
+      } catch (_e) {
+        toast.error("An error occurred. Please try again later.");
+      }
     },
   });
+
   const handleCancel = () => router.push("/wallet");
   const currency = ["USDT", "BNB", "DOT", "SOL", "BTC"];
+
   return (
-    <CreatWalletForm
+    <CreateWalletForm
       currencyOptions={currency}
       formik={formik}
       handleCancel={handleCancel}
+      onSuccess={() => toast.success("Balance created successfully")}
+      onError={(error: string) => toast.error(error)}
     />
   );
 }

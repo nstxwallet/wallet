@@ -1,77 +1,108 @@
 "use client";
-import {useRouter} from "next/navigation";
-import {
-    FaCalendarAlt,
-    FaCheckCircle,
-    FaClipboardList,
-    FaDollarSign,
-    FaInfoCircle,
-    FaMoneyBillWave,
-    FaUser
-} from "react-icons/fa";
+
+import { useRouter } from "next/navigation";
+import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import React from "react";
-import {Transaction} from "@/core";
+
+import { Transaction } from "@/core";
+import { format, isThisWeek, isToday, isYesterday } from "date-fns";
+import { Paper } from "@/shared";
 
 interface TransactionProps {
-    transactions?: Transaction[];
-    isTransactionsLoading?: boolean;
-    isTransactionsError?: boolean;
+  transactions?: Transaction[];
+  isTransactionsLoading?: boolean;
+  isTransactionsError?: boolean;
 }
-export const TransactionsList = ({ transactions }: TransactionProps) => {
-    const router = useRouter();
 
-    return (
-        <ul className="space-y-4 sm:space-y-6">
-            {transactions?.map((transaction) => (
-                <li
-                    key={transaction.id}
-                    className="p-4 sm:p-6 bg-gray-800 border-l-4 border-blue-500 rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300 flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6 text-white"
+const groupTransactionsByDate = (transactions: Transaction[] = []) => {
+  const groups = {
+    today: [] as Transaction[],
+    yesterday: [] as Transaction[],
+    thisWeek: [] as Transaction[],
+    older: [] as Transaction[],
+  };
+
+  for (const transaction of transactions) {
+    const transactionDate = new Date(transaction.createdAt);
+    if (Number.isNaN(transactionDate.getTime())) {
+      console.warn("Invalid date format for transaction:", transaction);
+      continue;
+    }
+
+    if (isToday(transactionDate)) {
+      groups.today.push(transaction);
+    } else if (isYesterday(transactionDate)) {
+      groups.yesterday.push(transaction);
+    } else if (isThisWeek(transactionDate)) {
+      groups.thisWeek.push(transaction);
+    } else {
+      groups.older.push(transaction);
+    }
+  }
+
+  return groups;
+};
+
+export const TransactionsList = ({ transactions }: TransactionProps) => {
+  const router = useRouter();
+  const groupedTransactions = groupTransactionsByDate(transactions || []);
+
+  return (
+    <div>
+      {Object.entries(groupedTransactions).map(([group, items]) =>
+        items.length > 0 ? (
+          <div key={group} className="mt-6">
+            <h2 className="text-xl font-semibold text-white mb-4">
+              {group === "today" && "Today"}
+              {group === "yesterday" && "Yesterday"}
+              {group === "thisWeek" && "This Week"}
+              {group === "older" && "Older..."}
+            </h2>
+            <ul className="space-y-4 sm:space-y-6">
+              {items.map((transaction) => (
+                <Paper
+                  key={transaction.id}
+                  elevation={3}
                 >
-                    <button
-                        onClick={() => router.push(`/transactions/${transaction.id}`)}
-                        className="block w-full text-left"
-                    >
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 tracking-wide">
-                            <div className="flex items-center">
-                                <FaClipboardList className="mr-2 text-blue-500" />
-                                <strong>ID:</strong> {transaction.id}
-                            </div>
-                            <div className="flex items-center">
-                                <FaUser className="mr-2 text-blue-500" />
-                                <strong>User ID:</strong> {transaction.userId}
-                            </div>
-                            <div className="flex items-center">
-                                {transaction.status === "completed" ? (
-                                    <FaCheckCircle className="mr-2 text-green-500" />
-                                ) : (
-                                    <FaInfoCircle className="mr-2 text-yellow-500" />
-                                )}
-                                <strong>Status:</strong> {transaction.status}
-                            </div>
-                            <div className="flex items-center">
-                                <FaClipboardList className="mr-2 text-blue-500" />
-                                <strong>Type:</strong> {transaction.type}
-                            </div>
-                            <div className="flex items-center">
-                                <FaMoneyBillWave className="mr-2 text-green-500" />
-                                <strong>Amount:</strong> {transaction.amount}
-                            </div>
-                            <div className="flex items-center">
-                                <FaDollarSign className="mr-2 text-blue-500" />
-                                <strong>Currency:</strong> {transaction.currency}
-                            </div>
-                            <div className="flex items-center">
-                                <FaCalendarAlt className="mr-2 text-gray-500" />
-                                <strong>Created:</strong> {transaction.createdAt}
-                            </div>
-                            <div className="flex items-center">
-                                <FaCalendarAlt className="mr-2 text-gray-500" />
-                                <strong>Updated:</strong> {transaction.updatedAt}
-                            </div>
-                        </div>
-                    </button>
-                </li>
-            ))}
-        </ul>
-    );
+                  <button
+                    onClick={() =>
+                      router.push(`/transactions/${transaction.id}`)
+                    }
+                    className="block w-full text-left"
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center text-lg font-semibold">
+                        {transaction.type === "deposit" ? (
+                          <FaArrowDown className="text-green-500 mr-2" />
+                        ) : (
+                          <FaArrowUp className="text-red-500 mr-2" />
+                        )}
+                        <span className="text-gray-300 capitalize">
+                          {transaction.type}
+                        </span>
+                      </div>
+                      <span className="text-sm font-semibold text-gray-500">
+                        ID: {transaction.id}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-2xl font-bold text-white">
+                        {transaction.amount} USD
+                      </span>
+                    </div>
+                    <div className="text-sm text-gray-400">
+                      {format(
+                        new Date(transaction.createdAt),
+                        "HH:mm, dd MMM yyyy"
+                      )}
+                    </div>
+                  </button>
+                </Paper>
+              ))}
+            </ul>
+          </div>
+        ) : null
+      )}
+    </div>
+  );
 };

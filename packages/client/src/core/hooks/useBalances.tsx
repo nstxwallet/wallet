@@ -1,60 +1,33 @@
 "use client";
-import {
-	createUserBalance,
-	getUserBalance,
-	getUserBalances,
-} from "@/core"
-import { useMutation, useQuery } from "react-query";
+import "reflect-metadata"
+import { useObservable, useServices } from "@/core";
+import { useEffect } from "react";
 
-export const useBalances = ({ userId }: { userId: string }) => {
-	const balancesQuery = useQuery("balances", () =>
-		getUserBalances({
-			userId,
-		}),
-	);
-	return {
-		balances: balancesQuery.data,
-		isLoadingBalances: balancesQuery.isLoading,
-		isErrorBalances: balancesQuery.isError,
-	};
-};
-export const useBalance = ({ userId, id }: { userId: string; id: string }) => {
-	const balanceQuery = useQuery(["balance", id], () =>
-		getUserBalance({ userId, id }),
-	);
+interface UseBalancesProps {
+  userId?: string;
+}
 
-	return {
-		balance: balanceQuery.data,
-		isLoadingBalance: balanceQuery.isLoading,
-		isErrorBalance: balanceQuery.isError,
-	};
-};
+export const useBalances = ({ userId }: UseBalancesProps) => {
+  const { balanceService } = useServices();
+  const balances = useObservable(balanceService.balances);
+  const balance = useObservable(balanceService.balance);
 
-export const useCreateBalance = ({
-	onSuccess,
-	onError,
-}: {
-	onSuccess: (data: unknown) => void;
-	onError: (error: unknown) => void;
-}) => {
-	const createBalance = useMutation(
-		(data: { currency: string }) => createUserBalance(data),
-		{
-			onSuccess: async (data) => {
-				if (onSuccess) {
-					onSuccess(data);
-				}
-			},
-			onError: async (error) => {
-				if (onError) {
-					onError(error);
-				}
-			},
-		},
-	);
-	return {
-		createBalance: createBalance.mutate,
-		isLoading: createBalance.isLoading,
-		isError: createBalance.isError,
-	};
+  useEffect(() => {
+    if (userId) {
+      balanceService.fetchBalances();
+    }
+  }, [userId, balanceService]);
+
+  const getBalances = () => {
+    balanceService.fetchBalances();
+  };
+
+  const createBalance = (currency: string) => {
+    balanceService.createBalance(currency);
+  };
+
+  const getBalance = (id: string) => {
+    balanceService.fetchBalance(id);
+  };
+  return { balances, balance, getBalance, createBalance, getBalances };
 };

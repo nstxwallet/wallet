@@ -1,33 +1,41 @@
 "use client";
 
 import "reflect-metadata";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-import { ServicesProvider } from "@/core";
-import {Col, Container, Header} from "@/shared";
+import {ServicesProvider, useAuth} from "@/core";
+import { Header } from "@/shared";
 
 interface ClientLayoutProps {
-	children: React.ReactNode;
+    children: React.ReactNode;
 }
 
-export default function ClientLayout({ children }: ClientLayoutProps ) {
-	const queryClient = new QueryClient();
+export default function ClientLayout({ children }: ClientLayoutProps) {
+    const queryClient = new QueryClient();
+    const { user } = useAuth();
+    const [isLoading, setIsLoading] = useState(true);
 
-	return (
-		<ServicesProvider>
-			<QueryClientProvider client={queryClient}>
-				<div className="overflow-auto bg-gray-900 w-full text-white min-h-screen flex flex-col">
-					<Header />
-					<main className="flex-grow p-8 overflow-y-auto">
-						<Container>
-							<Col>
-								{children}
-							</Col>
-						</Container>
-					</main>
-				</div>
-			</QueryClientProvider>
-		</ServicesProvider>
-	);
+    useEffect(() => {
+        setIsLoading(false);
+    }, [user]);
+
+    if (isLoading) return <div>Loading...</div>;
+
+    if (!user) {
+        return (
+            <div className="text-center p-4 text-red-500">
+                <h2>You must be logged in to access this page</h2>
+            </div>
+        );
+    }
+
+    return (
+        <ServicesProvider>
+            <QueryClientProvider client={queryClient}>
+                <Header />
+                <div className="p-6">{children}</div>
+            </QueryClientProvider>
+        </ServicesProvider>
+    );
 }

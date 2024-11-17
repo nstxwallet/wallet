@@ -1,13 +1,12 @@
 import { useContext } from "react";
-import { ServicesContext } from "@/core/services/provider/ServicesProvider";
+import { ServicesContext } from "@/core";
+import "reflect-metadata"
 
 export const useServices = () => {
+    const context = useContext(ServicesContext);
 
-  const context = useContext(ServicesContext);
-
-    if (!context) {
+    if (!context ) {
         throw new Error("Forgot to wrap component in ServicesProvider");
     }
-
     return context;
 };

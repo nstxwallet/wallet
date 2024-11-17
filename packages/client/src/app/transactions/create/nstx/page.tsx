@@ -8,9 +8,9 @@ import {NstxPayment} from "@/feautures";
 
 export default function NSTXPaymentPage() {
   const { user } = useAuth();
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const { balances } = useBalances({ userId: user?.id });
 
-  const { balances } = useBalances({ userId: user?.id as string });
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const validationSchema = Yup.object({
     receiverId: Yup.string().required("Recipient is required"),
@@ -28,14 +28,15 @@ export default function NSTXPaymentPage() {
       message: "",
     },
     validationSchema,
-    onSubmit: (values) => {
+    onSubmit: (_values) => {
       setShowConfirmation(true);
-      console.log(values);
+
     },
   });
 
   return (
     <NstxPayment user={user}
+                 onSubmit={formik.handleSubmit}
       formik={formik}
       balances={balances}
       showConfirmation={showConfirmation}

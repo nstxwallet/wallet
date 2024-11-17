@@ -1,4 +1,4 @@
-import { useFormik } from "formik";
+import {FormikProps, useFormik} from "formik";
 import React from "react";
 import { FaGithub, FaInstagram, FaTelegram } from "react-icons/fa";
 
@@ -10,27 +10,16 @@ import {
   Paper,
   Typography,
 } from "@/shared";
-import * as Yup from "yup";
 
 interface SupportPageProps {
-  validationSchema: Yup.Schema;
+  formik : FormikProps<{ email: string; name: string; subject: string; message: string }>;
   onSubmit: () => void;
 }
 
 export const SupportPage = ({
-  validationSchema,
+    formik,
   onSubmit,
 }: SupportPageProps) => {
-  const formik = useFormik({
-    initialValues: {
-      name: "",
-      email: "",
-      subject: "",
-      message: "",
-    },
-    validationSchema: validationSchema,
-    onSubmit,
-  });
 
   return (
     <Container className="space-y-12 py-8">
@@ -58,7 +47,7 @@ export const SupportPage = ({
 
       <Container className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="space-y-8">
-          <Paper color="secondary" space={3}>
+          <Paper space={3}>
             <Typography center color="primary" variant="h4" className="mb-4">
               Write a problem and we solve it
             </Typography>

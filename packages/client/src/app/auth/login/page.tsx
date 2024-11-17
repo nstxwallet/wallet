@@ -25,6 +25,7 @@ export default function Login() {
 				login(values)
 					.then(() => {
 						navigate.push("/wallet");
+						toast.success("Logged in successfully");
 					})
 					.catch(() => {
 						toast.error("Invalid email or password");

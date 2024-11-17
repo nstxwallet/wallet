@@ -1,6 +1,9 @@
+"use client"
 import Link from "next/link";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import {toast} from "react-toastify";
+
 import {
   Button,
   Form,
@@ -24,7 +27,8 @@ export function LoginForm({ onSubmit, validationSchema }: LoginFormProps) {
     },
     validationSchema,
     onSubmit: (values) => {
-      onSubmit(values);
+      onSubmit(values)
+      toast.success("Logged in successfully");
     },
   });
 
@@ -72,7 +76,7 @@ export function LoginForm({ onSubmit, validationSchema }: LoginFormProps) {
               </Button>
             </Form>
             <Row justify="between">
-              <Link href="/forgotpassword" className="text-blue-500 hover:text-blue-400 text-xs">
+              <Link href="/auth/forgot-password" className="text-blue-500 hover:text-blue-400 text-xs">
                 Forgot Password?
               </Link>
               <Link href="/auth/sign-up" className="text-blue-500 hover:text-blue-400 text-xs">

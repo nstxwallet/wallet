@@ -20,11 +20,13 @@ interface NstxPaymentProps {
     amount: string;
     message: string;
   }>;
+    onSubmit: () => void;
   balances?: Balance[];
   user?: User;
 }
 
 export const NstxPayment = ({
+    onSubmit,
   showConfirmation,
   formik,
   balances,
@@ -110,7 +112,6 @@ export const NstxPayment = ({
         </Row>
       ) : (
         <ConfirmTransaction
-          senderId={user?.id as string}
           balances={balances}
           user={user}
           receiverId={formik.values.receiverId}
