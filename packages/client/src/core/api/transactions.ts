@@ -1,5 +1,4 @@
 import { Transaction, instance } from "@/core";
-
 export const getTransactions = async ({
 	id,
 }: {

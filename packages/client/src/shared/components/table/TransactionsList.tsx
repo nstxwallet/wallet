@@ -10,8 +10,6 @@ import { Paper } from "@/shared";
 
 interface TransactionProps {
   transactions?: Transaction[];
-  isTransactionsLoading?: boolean;
-  isTransactionsError?: boolean;
 }
 
 const groupTransactionsByDate = (transactions: Transaction[] = []) => {

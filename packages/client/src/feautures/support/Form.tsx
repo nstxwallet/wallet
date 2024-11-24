@@ -1,4 +1,4 @@
-import {FormikProps, useFormik} from "formik";
+import {FormikProps} from "formik";
 import React from "react";
 import { FaGithub, FaInstagram, FaTelegram } from "react-icons/fa";
 
@@ -13,12 +13,10 @@ import {
 
 interface SupportPageProps {
   formik : FormikProps<{ email: string; name: string; subject: string; message: string }>;
-  onSubmit: () => void;
 }
 
 export const SupportPage = ({
-    formik,
-  onSubmit,
+    formik
 }: SupportPageProps) => {
 
   return (
@@ -79,11 +77,9 @@ export const SupportPage = ({
                   onChange={formik.handleChange}
                   value={formik.values.subject}
                   type="text"
-                  placeholder="What is this about?"
+                  placeholder="Problem subject"
                   className="mt-1"
                 />
-
-                <div className="hidden md:block" />
               </div>
 
               <Input
@@ -191,7 +187,7 @@ export const SupportPage = ({
             {
               question: "How to verify my account?",
               answer:
-                "Account verification can be done through the settings page. Follow the instructions provided there.",
+                "Account verification can be done through the settings.ts page. Follow the instructions provided there.",
             },
             {
               question: "What are the supported payment methods?",

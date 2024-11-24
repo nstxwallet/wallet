@@ -1,3 +1,3 @@
 export * from './ServicesProvider'
-export * from './ToastProvider'
+export * from '../toast/ToastProvider'
 export * from './services'

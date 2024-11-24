@@ -1,10 +1,9 @@
-"use client"
+"use client";
 import { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-
-import {useAuth, useBalances} from "@/core";
-import {NstxPayment} from "@/feautures";
+import { useAuth, useBalances } from "@/core";
+import { NstxPaymentForm } from "@/feautures/transactions/create/nstx";
 
 export default function NSTXPaymentPage() {
   const { user } = useAuth();
@@ -30,13 +29,12 @@ export default function NSTXPaymentPage() {
     validationSchema,
     onSubmit: (_values) => {
       setShowConfirmation(true);
-
     },
   });
 
   return (
-    <NstxPayment user={user}
-                 onSubmit={formik.handleSubmit}
+    <NstxPaymentForm
+      user={user}
       formik={formik}
       balances={balances}
       showConfirmation={showConfirmation}

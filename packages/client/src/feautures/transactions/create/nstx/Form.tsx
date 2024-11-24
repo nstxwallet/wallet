@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Button,
   Form,
@@ -8,9 +10,9 @@ import {
   Typography,
 } from "@/shared/components";
 import { FormikProps } from "formik";
-
-import { Balance, User } from "@/core";
-import { ConfirmTransaction } from "@/feautures";
+import { Balance, User, useTransactions } from "@/core";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 interface NstxPaymentProps {
   showConfirmation: boolean;
@@ -20,105 +22,136 @@ interface NstxPaymentProps {
     amount: string;
     message: string;
   }>;
-    onSubmit: () => void;
   balances?: Balance[];
   user?: User;
 }
 
-export const NstxPayment = ({
-    onSubmit,
+export const NstxPaymentForm = ({
   showConfirmation,
   formik,
-  balances,
+  balances = [],
   user,
 }: NstxPaymentProps) => {
+  const balanceAfterPayment =
+    Number(
+      balances.find((balance) => balance.currency === formik.values.currency)
+        ?.value || 0
+    ) - Number(formik.values.amount);
+  const router = useRouter();
+  const { createNSTXTransfer } = useTransactions({ userId: user?.id });
+
+  const handleConfirm = async () => {
+    try {
+      const values = {
+        senderId: user?.id || "",
+        receiverId: formik.values.receiverId,
+        amount: parseFloat(formik.values.amount),
+        currency: formik.values.currency,
+      };
+      createNSTXTransfer(values);
+      await router.push("/transactions");
+    } catch (error) {
+      toast.error("Failed to create transaction 228");
+      console.error("Failed to create transaction 228", error);
+    }
+  };
+
+  const handleCancel = () => {
+    router.push("/transactions/create").then((r) => r);
+  };
+
   return (
-    <>
+    <Paper
+      variant="gradient"
+      elevation={3}
+      className="max-w-lg mx-auto p-6 space-y-6"
+    >
       {!showConfirmation ? (
-        <Row>
-          <Paper color="secondary" elevation={3} space={3}>
-            <Typography center variant="h3">
-              Send crypto to NSTX wallet
-            </Typography>
-            <Form onSubmit={formik.handleSubmit}>
-              <Input
-                id="receiverId"
-                fullWidth
-                name="receiverId"
-                type="text"
-                value={formik.values.receiverId}
-                onChange={formik.handleChange}
-              />
-
-              <Select
-                id="currency"
-                name="currency"
-                value={formik.values.currency}
-                onChange={formik.handleChange}
-              >
-                <option value="" disabled>
-                  Select currency
+        <>
+          <Typography center variant="h3">
+            Send Crypto to NSTX Wallet
+          </Typography>
+          <Form onSubmit={formik.handleSubmit}>
+            <Input
+              id="receiverId"
+              name="receiverId"
+              placeholder="Receiver ID"
+              value={formik.values.receiverId}
+              onChange={formik.handleChange}
+              fullWidth
+            />
+            <Select
+              id="currency"
+              name="currency"
+              value={formik.values.currency}
+              onChange={formik.handleChange}
+              fullWidth
+            >
+              <option value="" disabled>
+                Select Currency
+              </option>
+              {balances.map((balance) => (
+                <option key={balance.currency} value={balance.currency}>
+                  {balance.currency}
                 </option>
-                {balances?.map((balance) => (
-                  <option key={balance.currency} value={balance.currency}>
-                    {balance.currency}
-                  </option>
-                ))}
-              </Select>
-
-              <Input
-                id="amount"
-                fullWidth
-                name="amount"
-                type="number"
-                value={formik.values.amount}
-                onChange={formik.handleChange}
-              />
-
-              <Input
-                fullWidth
-                id="message"
-                name="message"
-                type="text"
-                value={formik.values.message}
-                onChange={formik.handleChange}
-              />
-
-              <Button fullWidth type="submit">
-                Send
-              </Button>
-            </Form>
-          </Paper>
-
-          <Paper variant="gradient" elevation={3} space={3}>
-            <Typography variant="h4">Payment Information</Typography>
-            <Typography variant="body1">
-              Sending payments from one NSTX wallet to another is quick and
-              secure. Ensure that you have the correct receiver ID and select
-              the appropriate currency. You can add a message to your
-              transaction for reference.
-            </Typography>
-            <Typography variant="body1">
-              Transactions are processed instantly, providing an efficient way
-              to transfer funds without the delays typically associated with
-              traditional banking.
-            </Typography>
-            <Typography variant="body1">
-              Always double-check the receiver details before confirming your
-              payment to avoid any mistakes. Your transactions are encrypted and
-              secure, ensuring your funds are safe.
-            </Typography>
-          </Paper>
-        </Row>
+              ))}
+            </Select>
+            <Input
+              id="amount"
+              name="amount"
+              type="number"
+              placeholder="Amount"
+              value={formik.values.amount}
+              onChange={formik.handleChange}
+              fullWidth
+            />
+            <Input
+              id="message"
+              name="message"
+              placeholder="Message (Optional)"
+              value={formik.values.message}
+              onChange={formik.handleChange}
+              fullWidth
+            />
+            <Button type="submit" variant="primary" fullWidth>
+              Send
+            </Button>
+          </Form>
+        </>
       ) : (
-        <ConfirmTransaction
-          balances={balances}
-          user={user}
-          receiverId={formik.values.receiverId}
-          amount={formik.values.amount}
-          currency={formik.values.currency}
-        />
+        <>
+          <Typography center variant="h4">
+            Confirm Payment
+          </Typography>
+          <Typography center variant="h2">
+            {formik.values.amount} {formik.values.currency}
+          </Typography>
+          <Row justify="between">
+            <Typography>To:</Typography>
+            <Typography>{formik.values.receiverId || "Unknown"}</Typography>
+          </Row>
+          <Row justify="between">
+            <Typography>From:</Typography>
+            <Typography>{user?.id || "Unknown"}</Typography>
+          </Row>
+          <Row justify="between">
+            <Typography>Balance after payment:</Typography>
+            <Typography
+              className={balanceAfterPayment < 0 ? "text-red-500" : ""}
+            >
+              {balanceAfterPayment.toFixed(2)} {formik.values.currency}
+            </Typography>
+          </Row>
+          <div className="flex justify-between space-x-4">
+            <Button onClick={handleCancel} variant="danger" fullWidth>
+              Cancel
+            </Button>
+            <Button onClick={handleConfirm} variant="primary" fullWidth>
+              Confirm
+            </Button>
+          </div>
+        </>
       )}
-    </>
+    </Paper>
   );
 };

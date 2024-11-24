@@ -8,7 +8,7 @@ import {
   login as loginAPI,
   logout as logoutAPI,
   register as registerAPI,
-  User
+  User,
 } from "@/core";
 
 interface LoginCredentials {
@@ -47,8 +47,10 @@ export class AuthService {
     if (typeof window !== "undefined") {
       const token = sessionStorage.getItem("token");
       if (token) {
-        this.tokenSubject.next({ accessToken: token });
-        this.getUser().then((r) => r);
+        this.tokenSubject.next({ accessToken: token },             );
+        this.getUser().catch((_e) => {
+          this.tokenSubject.next(null);
+        });
       }
     }
   }
@@ -58,8 +60,9 @@ export class AuthService {
   }
 
   logout() {
-    this.logoutUser().then((r) => r);
-    this.authSubject.next(null);
+    this.logoutUser().then(() => {
+      this.authSubject.next(null);
+    });
   }
 
   signup(credentials: SignUpCredentials) {
@@ -69,11 +72,9 @@ export class AuthService {
   private async logoutUser() {
     try {
       await logoutAPI();
-      this.tokenSubject.next(null);
-      this.userSubject.next(null);
-    } catch (_e) {
-      this.tokenSubject.next(null);
-      this.userSubject.next(null);
+      this.clearSession();
+    } catch (error) {
+      this.clearSession();
     }
   }
 
@@ -81,7 +82,7 @@ export class AuthService {
     try {
       const user = await getUserAPI();
       this.userSubject.next(user);
-    } catch (_e) {
+    } catch (error) {
       this.userSubject.next(null);
     }
   }
@@ -91,12 +92,10 @@ export class AuthService {
       if (credentials) {
         try {
           const token = await loginAPI(credentials);
-          this.tokenSubject.next({ accessToken: token });
-          if (typeof window !== "undefined") {
-            sessionStorage.setItem("token", token);
-          }
-        } catch (_e) {
-          this.tokenSubject.next(null);
+          this.setToken(token);
+          await this.getUser();
+        } catch (error) {
+          this.clearSession();
         }
       }
     });
@@ -108,7 +107,7 @@ export class AuthService {
         try {
           const user = await registerAPI(credentials);
           this.userSubject.next(user);
-        } catch (_e) {
+        } catch (error) {
           this.userSubject.next(null);
         }
       }
@@ -123,5 +122,20 @@ export class AuthService {
         this.userSubject.next(null);
       }
     });
+  }
+
+  private setToken(accessToken: string) {
+    this.tokenSubject.next({accessToken});
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("token", accessToken);
+    }
+  }
+
+  private clearSession() {
+    this.tokenSubject.next(null);
+    this.userSubject.next(null);
+    if (typeof window !== "undefined") {
+      sessionStorage.removeItem("token");
+    }
   }
 }

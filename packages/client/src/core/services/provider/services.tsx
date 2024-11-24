@@ -8,9 +8,6 @@ container.registerSingleton(AuthService, AuthService);
 container.register("UserStream", {
     useValue: container.resolve(AuthService).user,
 });
-
-console.log("AuthService registered:", container.isRegistered(AuthService));
-container.registerSingleton(BalanceService, BalanceService);
-console.log("BalanceService registered:", container.isRegistered(BalanceService));
+container.registerSingleton(BalanceService, BalanceService)
 
 export { container };

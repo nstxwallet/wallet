@@ -1,26 +1,19 @@
 "use client";
 
-import {useAuth, useBalances, useTransactions} from "@/core";
+import { useAuth, useBalances, useTransactions } from "@/core";
 import { WalletForm } from "@/feautures";
 
 export default function Wallet() {
   const { user } = useAuth();
 
   const { balances } = useBalances({ userId: user?.id });
-
-  const {
-    transactions,
-    isLoading: isLoadingTransactions,
-    isError: isErrorTransactions,
-  } = useTransactions({ id: "2" });
+  const { transactions } = useTransactions({ userId: user?.id });
 
   return (
-    <WalletForm
-      balances={balances}
-      user={user}
-      transactions={transactions}
-      isLoadingTransactions={isLoadingTransactions}
-      isErrorTransactions={isErrorTransactions}
-    />
+      <WalletForm
+          balances={balances ?? undefined}
+          user={user ?? undefined}
+          transactions={transactions ?? undefined}
+      />
   );
 }

@@ -2,7 +2,7 @@
 
 import { ToastContainer } from "react-toastify";
 
-export default function ToastProvider() {
+export  const  ToastProvider = () => {
 	return (
 		<ToastContainer
 			stacked={true}

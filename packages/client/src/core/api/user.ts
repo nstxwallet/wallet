@@ -1,17 +1,20 @@
 import { instance, User } from "@/core";
 
 export const login = async ({
-	email,
-	password,
+  email,
+  password,
 }: {
-	email: string;
-	password: string;
+  email: string;
+  password: string;
 }): Promise<string> => {
-	const response = await instance.post("/login", {
-		email: email,
-		password: password,
-	});
-	return response.data.accessToken;
+  const response = await instance.post("/login", {
+    email: email,
+    password: password,
+  });
+  if (response.status !== 200 || !response.data.accessToken) {
+    throw new Error("Login failed: Invalid response");
+  }
+  return response.data.accessToken;
 };
 
 

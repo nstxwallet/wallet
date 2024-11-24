@@ -31,6 +31,6 @@ export default function Support() {
   });
 
   return (
-    <SupportPage onSubmit={formik.handleSubmit} formik={formik} />
+    <SupportPage formik={formik} />
   );
 }

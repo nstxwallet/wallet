@@ -1,5 +1,5 @@
 import React from "react";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   FiArrowLeft,
   FiChevronDown,
@@ -10,9 +10,8 @@ import { BiShare, BiSupport } from "react-icons/bi";
 import { Button, Col, Paper, Row, Typography } from "@/shared";
 import { Transaction } from "@/core";
 
-
 interface TransactionDetailsProps {
-  transaction?: Transaction[];
+  transaction: Transaction
   isExpanded: boolean;
   toggleExpand: () => void;
   handleCopyId: () => void;
@@ -62,7 +61,7 @@ export const TransactionDetails = ({
       <Typography
         center
         variant="h2"
-        color={transaction.type === "transfer" ? "danger" : "primary"}
+        color={transaction?.type === "transfer" ? "danger" : "primary"}
       >
         {transaction.type === "transfer" ? "-" : "+"}
         {transaction.amount} {transaction.currency}

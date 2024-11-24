@@ -1,3 +1,4 @@
+'use client'
 import React, {
   createContext,
   FC,
@@ -9,12 +10,15 @@ import { Loading } from "@/shared/components";
 import { container } from "@/core/services/provider/services";
 import { AuthService } from "@/core/services/auth/AuthService";
 import { BalanceService } from "@/core/services/balance";
-import ToastProvider from "@/core/services/provider/ToastProvider";
 import "reflect-metadata";
+import { ToastProvider, TransactionService } from "@/core";
+import { UserSettingsService } from "@/core/services/settings";
 
 interface Services {
   authService: AuthService;
   balanceService: BalanceService;
+  transactionService: TransactionService;
+  userSettingsService: UserSettingsService;
 }
 
 interface ServicesProviderProps {
@@ -31,11 +35,17 @@ export const ServicesProvider: FC<ServicesProviderProps> = ({ children }) => {
     const init = async () => {
       const authService = container.resolve(AuthService);
       const balanceService = container.resolve(BalanceService);
+      const transactionService = container.resolve(TransactionService);
+      const userSettingsService = container.resolve(UserSettingsService);
 
-      setServices({ authService, balanceService });
+      setServices({
+        authService,
+        balanceService,
+        transactionService,
+        userSettingsService,
+      });
       setLoading(false);
     };
-
     init();
   }, []);
 

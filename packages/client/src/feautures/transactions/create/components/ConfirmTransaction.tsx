@@ -4,11 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
-import { Balance, useNSTXTransfer, User } from "@/core";
+import { Balance, User, useTransactions } from "@/core";
 import { Button, Paper, Row, Typography } from "@/shared";
 
 interface ConfirmTransactionProps {
-  user: User | undefined
+  user: User | undefined;
   receiverId?: string;
   amount: string;
   currency: string;
@@ -16,13 +16,13 @@ interface ConfirmTransactionProps {
 }
 
 export const ConfirmTransaction = ({
-									   user,
-									   receiverId,
-									   amount,
-									   currency,
-									   balances,
-								   }: ConfirmTransactionProps) => {
-	const router = useRouter();
+  user,
+  receiverId,
+  amount,
+  currency,
+  balances,
+}: ConfirmTransactionProps) => {
+  const router = useRouter();
   const [agreeToTerms, setAgreeToTerms] = useState(false);
 
   const balance = balances?.find((b) => b.currency === currency);
@@ -30,17 +30,9 @@ export const ConfirmTransaction = ({
   const amountToDeduct = parseFloat(amount) || 0;
   const balanceAfterPayment = currentBalance - amountToDeduct;
 
-	const { NSTXTransfer } = useNSTXTransfer({
-		onSuccess: () => {
-			toast.success("Payment was successful");
-      router.push("/transactions");
-		},
-		onError: (_e) => {
-			toast.error("Failed to make payment. Please try again.");
-		},
-	});
+  const { createNSTXTransfer } = useTransactions({ userId: user?.id });
 
-	const onConfirm = () => {
+  const onConfirm = () => {
     if (!agreeToTerms) {
       toast.warn("Please agree to the terms and conditions before proceeding.");
       return;
@@ -56,8 +48,8 @@ export const ConfirmTransaction = ({
       return;
     }
 
-    NSTXTransfer({
-      senderId: user.id,
+    createNSTXTransfer({
+      senderId: user?.id,
       receiverId,
       amount: amountToDeduct,
       currency,
@@ -100,7 +92,7 @@ export const ConfirmTransaction = ({
         </Typography>
       </Row>
 
-		<Row justify="center">
+      <Row justify="center">
         <input
           type="checkbox"
           name="terms"
