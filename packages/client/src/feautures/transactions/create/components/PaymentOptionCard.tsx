@@ -19,7 +19,7 @@ export const PaymentOptionCard = ({
 	return (
 		<Paper
 			onClick={onClick}
-			className={`flex flex-col md:flex-row p-6 bg-gray-800 rounded-lg shadow-lg space-y-4 md:space-y-0 md:space-x-6 hover:bg-gray-700 transition-colors duration-300 cursor-pointer ${className}`}
+			className={`flex flex-col md:flex-row p-6 bg-zinc-800 rounded-lg shadow-lg space-y-4 md:space-y-0 md:space-x-6 hover:bg-gray-700 transition-colors duration-300 cursor-pointer ${className}`}
 		>
 			<div className="flex-shrink-0 text-blue-500 text-4xl">{icon}</div>
 			<Row>

@@ -40,7 +40,7 @@ export const TransactionsForm = ({
           isTransactionsError={isError}
         />
       </Row>
-        <Paper className="p-8 lg:p-12 bg-gray-800 rounded-lg shadow-lg space-y-6">
+        <Paper className="p-8 lg:p-12 bg-zinc-800 rounded-lg shadow-lg space-y-6">
             <Typography
                 variant="h2"
                 className="text-2xl lg:text-3xl font-semibold mb-6"

@@ -1,113 +1,152 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
-  MdBuild,
-  MdLogin,
-  MdLogout,
-  MdOutlineSupportAgent,
-  MdWallet,
-} from "react-icons/md";
+  Button,
+  DropdownDesktop,
+  DropdownMobile,
+  NstxLogo,
+  Typography,
+} from "@/shared";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/core";
-import { Button, NstxLogo, Row, Typography } from "@/shared";
+import { handleCopy, logout, useAuth } from "@/core";
+import {
+  MdLogout,
+  MdNotifications,
+  MdOutlineSupportAgent,
+  MdPerson,
+  MdSecurity,
+} from "react-icons/md";
+import { BiLineChart, BiShareAlt, BiTransfer, BiWallet } from "react-icons/bi";
 
 export const Header = () => {
   const router = useRouter();
-  const { logout, user } = useAuth();
+  const { user } = useAuth();
+
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const [isActionsDropdownOpen, setIsActionsDropdownOpen] = useState(false);
+
+  const walletActions = [
+    {
+      icon: <BiWallet />,
+      label: "Transfer",
+      onClick: () => router.push("/transactions/create/nstx"),
+    },
+    {
+      icon: <BiTransfer />,
+      label: "Payments & Transfers",
+      onClick: () => router.push("/transactions/create"),
+    },
+
+    {
+      icon: <BiLineChart />,
+      label: "Create Balance",
+      onClick: () => router.push("/wallet/create"),
+    },
+  ];
+
+  const profileActions = [
+    {
+      icon: <MdPerson />,
+      label: "Profile",
+      onClick: () => router.push("/profile"),
+    },
+    {
+      icon: <MdSecurity />,
+      label: "Security",
+      onClick: () => router.push("/security"),
+    },
+    {
+      icon: <MdNotifications />,
+      label: "Notifications",
+      onClick: () => router.push("/notifications"),
+    },
+    {
+      icon: <BiShareAlt />,
+      label: "Referrals",
+      onClick: () => router.push("/referrals"),
+    },
+    {
+      icon: <MdOutlineSupportAgent />,
+      label: "Support",
+      onClick: () => router.push("/support"),
+    },
+    { icon: <MdLogout />, label: "Logout", onClick: () => {
+        logout().then(() => router.push("/"));
+      } },
+  ];
 
   return (
     <>
-      <Row justify="center" className="px-4 py-2">
-        {user ? (
-          <Typography variant="h6" strong>
-            {user.firstName} {user.lastName}
-          </Typography>
-        ) : (
-          <Typography variant="h6" strong>
-            Not logged in
-          </Typography>
-        )}
-      </Row>
+      <Button
+        variant="secondary"
+        fullWidth
+        className="rounded-none justify-center text-xs bg-zinc-800 border-none"
+        onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+          handleCopy(e, user?.id)
+        }
+      >
+        {user?.id || "No ID Available"}
+      </Button>
+      {user ? (
+        <header className="flex mt-1 p-2 items-center justify-between w-full">
+          <div className="hidden lg:flex space-x-2">
+            <Button
+              variant="transparent"
+              onClick={() => router.push("/wallet/create")}
+            >
+              Create Balance
+            </Button>
+            <Button
+              variant="transparent"
+              onClick={() => router.push("/wallet")}
+            >
+              Transactions
+            </Button>
+          </div>
+          <div
+            className="relative hidden lg:block ml-auto"
+            onMouseEnter={() => setIsProfileDropdownOpen(true)}
+            onMouseLeave={() => setIsProfileDropdownOpen(false)}
+          >
+            <DropdownDesktop
+              isOpen={isProfileDropdownOpen}
+              options={profileActions}
+              buttonIcon={<MdPerson className="text-black" />}
+            />
+          </div>
 
-      {user && (
-        <header className="flex items-center justify-between p-4 bg-gray-900">
-          <Row className="flex-grow justify-between">
-            <div className="lg:hidden" onClick={() => router.push("/")}>
-              <NstxLogo  />
-            </div>
-            <div className="hidden lg:flex space-x-2">
-              <Button
-                variant="bordered"
-                onClick={() => router.push("/transactions/create")}
-              >
-                Transfer
-              </Button>
-              <Button
-                variant="transparent"
-                onClick={() => router.push("/wallet/create")}
-              >
-                Create Balance
-              </Button>
-              <Button
-                variant="transparent"
-                onClick={() => router.push("/wallet")}
-              >
-                Transactions
-              </Button>
-            </div>
+          <div
+            className="relative hidden lg:block ml-4"
+            onMouseEnter={() => setIsActionsDropdownOpen(true)}
+            onMouseLeave={() => setIsActionsDropdownOpen(false)}
+          >
+            <DropdownDesktop
+              isOpen={isActionsDropdownOpen}
+              options={walletActions}
+              buttonIcon={<BiWallet className="text-black" />}
+            />
+          </div>
+          <div className="flex ml-2 lg:hidden">
+            <DropdownMobile
+              buttonIcon={<MdPerson />}
+              options={profileActions}
+            />
+          </div>
 
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="transparent"
-                onClick={() => router.push("/support")}
-              >
-                <MdOutlineSupportAgent />
-              </Button>
-              <Button
-                variant="transparent"
-                onClick={() => router.push("/settings")}
-              >
-                <MdBuild />
-              </Button>
+          <div className="flex ml-2 lg:hidden">
+            <DropdownMobile buttonIcon={<BiWallet />} options={walletActions} />
+          </div>
 
-              {user ? (
-                <Button variant="transparent" onClick={logout}>
-                  <MdLogout />
-                </Button>
-              ) : (
-                <Button
-                  variant="transparent"
-                  onClick={() => router.push("/auth/login")}
-                >
-                  <MdLogin size={24} />
-                </Button>
-              )}
-            </div>
-          </Row>
+          <div className="hidden lg:flex ml-4">
+            <NstxLogo />
+          </div>
         </header>
+      ) : (
+        <Typography variant="h6" strong>
+          Not logged in
+        </Typography>
       )}
-
-      <Row className="lg:hidden px-4 py-2">
-        <Button
-          variant="bordered"
-          onClick={() => router.push("/transactions/create")}
-        >
-          Transfer
-        </Button>
-        <Button
-          variant="bordered"
-          onClick={() => router.push("/wallet/create")}
-        >
-           Balance
-        </Button>
-        <Button
-          variant="bordered"
-          onClick={() => router.push("/transactions")}
-        >
-          Transactions
-        </Button>
-      </Row>
     </>
   );
 };
