@@ -24,9 +24,9 @@ export const Paper = ({
 					  }: PaperProps) => {
 	const colorStyles = {
 		primary: "bg-gray-200 border-blue-500",
-		secondary: "bg-gray-800 border-blue-500",
+		secondary: "bg-zinc-800 border-blue-500",
 		danger: "bg-red-100 border-red-500",
-		transparent: "bg-none border-blue-500",
+		transparent: "bg-none border-zinc-500 border-1",
 	};
 
 	const elevationStyles = {

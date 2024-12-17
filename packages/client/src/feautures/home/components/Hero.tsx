@@ -17,7 +17,7 @@ export const Hero = ({
 }) => {
   return (
     <div className="bg-gradient-to-b from-black min-h-screen flex flex-col items-center justify-center p-8 w-full">
-      <CoinMarketCapBar />
+      <CoinMarketCapBar className="top-0" />
       <Typography center variant="h6" strong className="mb-4">
         Your one-stop shop for all things crypto. Exchange, store, and monitor
         your assets with ease.

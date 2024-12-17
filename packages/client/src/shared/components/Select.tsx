@@ -30,7 +30,7 @@ export const Select = ({
 				</label>
 			)}
 			<select
-				className={`rounded-lg border px-6 py-3 text-gray-200 bg-gray-800 transition-all duration-150 shadow-sm hover:border-blue-400 focus:border-blue-500 focus:ring-2 ${
+				className={`rounded-lg border px-6 py-1.5 text-gray-200 bg-zinc-800 transition-all duration-150 shadow-sm hover:border-blue-400 focus:border-blue-500 focus:ring-2 ${
 					error
 						? "border-red-500 focus:border-red-500 focus:ring-red-400"
 						: "border-gray-700 focus:border-blue-500 focus:ring-blue-400"

@@ -38,7 +38,7 @@ export const SupportPage = ({
           placeholder="Enter your email"
           className="rounded-r-none w-full"
         />
-        <Button variant="bordered" className="rounded-l-none">
+        <Button size="md" variant="bordered" className="rounded-l-none">
           Subscribe
         </Button>
       </Container>
@@ -92,7 +92,7 @@ export const SupportPage = ({
                 className="mt-4"
               />
 
-              <Button type="submit" variant="bordered">
+              <Button  size="md" type="submit" variant="bordered">
                 Send Message
               </Button>
             </Form>
@@ -159,7 +159,7 @@ export const SupportPage = ({
         ].map((category) => (
           <div
             key={category}
-            className="p-6 bg-gray-800 rounded-lg shadow-md max-w-lg hover:bg-gray-700 transition-colors"
+            className="p-6 bg-zinc-800 rounded-lg shadow-md max-w-lg hover:bg-gray-700 transition-colors"
           >
             <Typography color="primary" variant="h4">
               {category}
@@ -198,7 +198,7 @@ export const SupportPage = ({
             <Paper
               color="transparent"
               key={question}
-              className="p-6 bg-gray-800 rounded-lg shadow-md"
+              className="p-6 bg-zinc-800 rounded-lg shadow-md"
             >
               <Typography color="cyan" variant="h3">
                 {question}
@@ -218,7 +218,7 @@ export const SupportPage = ({
           placeholder="Enter your email"
           className="rounded-r-none w-full"
         />
-        <Button variant="bordered" className="rounded-l-none">
+        <Button  size="md" variant="bordered" className="rounded-l-none">
           Subscribe
         </Button>
       </Container>

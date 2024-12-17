@@ -7,13 +7,14 @@ import {
 	FaTelegramPlane,
 	FaTwitter,
 } from "react-icons/fa";
+import {NstxLogo} from "@/shared";
 
 export const Footer = () => {
 	return (
-		<footer className="text-gray-200 p-4 bg-gray-900">
+		<footer className="text-gray-200 p-4 bg-zinc-900">
 			<div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
 				<div className="mb-4 md:mb-0 text-center md:text-left">
-					<p className="text-lg font-light">Social Media</p>
+					<NstxLogo />
 				</div>
 
 				<div className="flex flex-wrap gap-4 justify-center md:justify-start mb-4 md:mb-0">
@@ -21,7 +22,7 @@ export const Footer = () => {
 						href="https://t.me/Blueremelka"
 						target="_blank"
 						rel="noopener noreferrer"
-						className="flex items-center gap-2 bg-gray-800 p-2 rounded-full hover:bg-gray-700 transition-colors"
+						className="flex items-center gap-2 bg-zinc-800 p-2 rounded-full hover:bg-gray-700 transition-colors"
 					>
 						<FaTelegramPlane size={20} />
 						<span className="text-sm">TG Chat</span>
@@ -30,7 +31,7 @@ export const Footer = () => {
 						href="https://t.me/Blueremelka"
 						target="_blank"
 						rel="noopener noreferrer"
-						className="flex items-center gap-2 bg-gray-800 p-2 rounded-full hover:bg-gray-700 transition-colors"
+						className="flex items-center gap-2 bg-zinc-800 p-2 rounded-full hover:bg-gray-700 transition-colors"
 					>
 						<FaTelegramPlane size={20} />
 						<span className="text-sm">TG Group</span>
@@ -39,7 +40,7 @@ export const Footer = () => {
 						href="https://twitter.com"
 						target="_blank"
 						rel="noopener noreferrer"
-						className="flex items-center gap-2 bg-gray-800 p-2 rounded-full hover:bg-gray-700 transition-colors"
+						className="flex items-center gap-2 bg-zinc-800 p-2 rounded-full hover:bg-gray-700 transition-colors"
 					>
 						<FaTwitter size={20} />
 						<span className="text-sm">Twitter</span>
@@ -50,7 +51,7 @@ export const Footer = () => {
 						href="https://medium.com"
 						target="_blank"
 						rel="noopener noreferrer"
-						className="flex items-center gap-2 bg-gray-800 p-2 rounded-full hover:bg-gray-700 transition-colors"
+						className="flex items-center gap-2 bg-zinc-800 p-2 rounded-full hover:bg-gray-700 transition-colors"
 					>
 						<FaMediumM size={20} />
 					</a>
@@ -58,7 +59,7 @@ export const Footer = () => {
 						href="https://instagram.com"
 						target="_blank"
 						rel="noopener noreferrer"
-						className="flex items-center gap-2 bg-gray-800 p-2 rounded-full hover:bg-gray-700 transition-colors"
+						className="flex items-center gap-2 bg-zinc-800 p-2 rounded-full hover:bg-gray-700 transition-colors"
 					>
 						<FaInstagram size={20} />
 					</a>
@@ -66,7 +67,7 @@ export const Footer = () => {
 						href="https://facebook.com"
 						target="_blank"
 						rel="noopener noreferrer"
-						className="flex items-center gap-2 bg-gray-800 p-2 rounded-full hover:bg-gray-700 transition-colors"
+						className="flex items-center gap-2 bg-zinc-800 p-2 rounded-full hover:bg-gray-700 transition-colors"
 					>
 						<FaFacebookF size={20} />
 					</a>
@@ -74,7 +75,7 @@ export const Footer = () => {
 						href="https://linkedin.com"
 						target="_blank"
 						rel="noopener noreferrer"
-						className="flex items-center gap-2 bg-gray-800 p-2 rounded-full hover:bg-gray-700 transition-colors"
+						className="flex items-center gap-2 bg-zinc-800   p-2 rounded-full hover:bg-gray-700 transition-colors"
 					>
 						<FaLinkedin size={20} />
 					</a>

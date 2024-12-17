@@ -32,9 +32,9 @@ export const Input = ({
 				onChange={onChange}
 				placeholder={placeholder}
 				type={type}
-				className={`rounded-lg border px-6 py-3 text-gray-700 shadow-sm transition ${
+				className={`rounded-lg border px-4 py-3 text-gray-700 shadow-sm transition ${
 					error ? "border-red-500 focus:border-red-500 focus:ring-red-300" : "border-blue-300 focus:border-blue-500 focus:ring-blue-300"
-				} bg-gray-800 hover:border-blue-400 focus:outline-none focus:ring-2 ${
+				} bg-zinc-800 hover:border-blue-400 focus:outline-none focus:ring-2 ${
 					fullWidth ? "w-full" : "w-auto"
 				} ${className}`}
 			/>

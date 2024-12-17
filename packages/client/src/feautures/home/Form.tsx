@@ -89,7 +89,7 @@ export const Home = ({
 
       <Container>
         <Accordition items={faqItems} />
-        <Card features={features} headingText="Why Choose Us?" />
+        <Card features={features}/>
       </Container>
     </>
   );
