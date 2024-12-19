@@ -1,3 +1,4 @@
+"use client"
 import type { Balance, User } from "@/core";
 import { BankCard } from "@/feautures";
 import React, { useState } from "react";
