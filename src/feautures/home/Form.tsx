@@ -10,7 +10,7 @@ interface HomeProps {
 	handleWallet: () => void;
 	handleSupport: () => void;
 	handleSignUp: () => void;
-	user: User;
+	user: User | null;
 }
 
 export const Home = ({
