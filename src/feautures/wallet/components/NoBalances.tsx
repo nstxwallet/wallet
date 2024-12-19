@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, Typography } from "@/shared";
 
 export const NoBalances = ({

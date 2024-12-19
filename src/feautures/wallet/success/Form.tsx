@@ -1,3 +1,5 @@
+"use client";
+
 import { useAuth, useBalances } from "@/core";
 import { Button, Container, Paper, Typography } from "@/shared";
 import React from "react";
